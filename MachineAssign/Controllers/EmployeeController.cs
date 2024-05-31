@@ -94,6 +94,15 @@ namespace MachineAssign.Controllers
             return CityList;
         }
 
+        public List<Citymodel> newmethod(int stateId)
+        {
+            EmpRepository EmpRepo = new EmpRepository();
+            List<Citymodel> CityList = new List<Citymodel>();
+            CityList = EmpRepo.GetCity(stateId);
+
+            return CityList;
+        }
+
         public async Task<IActionResult> Delete(int id)
         {
             EmpRepository EmpRepo = new EmpRepository();
