@@ -94,7 +94,7 @@ namespace MachineAssign.Controllers
             return CityList;
         }
 
-        public List<Citymodel> newmethod(int stateId)
+        public List<Citymodel> newmethod89(int stateId)
         {
             EmpRepository EmpRepo = new EmpRepository();
             List<Citymodel> CityList = new List<Citymodel>();
