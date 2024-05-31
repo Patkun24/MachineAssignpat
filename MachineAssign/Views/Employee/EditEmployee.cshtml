@@ -1,0 +1,210 @@
+﻿@model EmpModel
+@{
+    ViewData["Title"] = "EditEmployee";
+}
+
+<h1>Edit Employee</h1>
+
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="EditEmployee" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label">First Name</label>
+                <input asp-for="FirstName" class="form" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label">Last Name</label>
+                <input asp-for="LastName" class="form" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email Address</label>
+                <input asp-for="Email" class="form" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MobileNumber" class="control-label">Mobile Number</label>
+                <input asp-for="MobileNumber" class="form" />
+                <span asp-validation-for="MobileNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pan_no" class="control-label">PAN Number</label>
+                <input asp-for="Pan_no" class="form" />
+                <span asp-validation-for="Pan_no" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Passport_no" class="control-label">Passport Number</label>
+                <input asp-for="Passport_no" class="form" />
+                <span asp-validation-for="Passport_no" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BirthDate" class="control-label">Date of Birth</label>
+                <input asp-for="BirthDate" id="bdate" class="form" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="joinDate" class="control-label">Date of joinee</label>
+                <input asp-for="joinDate" id="jdate" class="form" />
+                <span asp-validation-for="joinDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Country">Country</label>
+                <select asp-for="Country" id="Country" class="dropdown">
+                    <option value="">Select</option>
+                    @foreach (var item in ViewBag.Country)
+                    {
+                    <option asp-for="Country" value="@item.Id">@item.Countryname</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="State">State</label>
+                <select asp-for="State" id="State" class="dropdown">
+                    <option value="">Select</option>
+                    @if (ViewBag.State != null)
+                    {
+                        @foreach (var item in ViewBag.State)
+                        {
+                            <option asp-for="State" value="@item.Id">@item.Statename</option>
+                        }
+                    }
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="City">City</label>
+                <select asp-for="City" id="City" class="dropdown">
+                    <option value="">Select</option>
+                    @if (ViewBag.City != null)
+                    {
+                        @foreach (var item in ViewBag.City)
+                        {
+                            <option asp-for="State" value="@item.Id">@item.CityName</option>
+                        }
+                    }
+                    </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="profilepicture" class="control-label">Profile Picture</label>
+                <input asp-for="profilepicture" type="file" />
+                <span asp-validation-for="profilepicture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input type="radio" name="Gender" value="1" />Male
+                <input type="radio" name="Gender" value="2" />Female
+
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <label asp-for="IsActive" class="form-check-label">Is Active</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <span asp-validation-for="IsActive" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+        $(function () {
+            $("#bdate").datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+        $(function () {
+            $("#jdate").datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+    $(document).ready(function () {
+
+        var countryValue = '@ViewBag.Employee.Country';
+        var stateValue = '@ViewBag.Employee.State';
+        var cityValue = '@ViewBag.Employee.City';
+        debugger;
+        $('#Country option').each(function () {
+            if ($(this).text() === countryValue) {
+                $(this).prop('selected', true);
+            }
+        });
+        $('#State option').each(function () {
+            if ($(this).text() === stateValue) {
+                $(this).prop('selected', true);
+            }
+        });
+        $('#City option').each(function () {
+            if ($(this).text() === cityValue) {
+                $(this).prop('selected', true);
+            }
+        });
+        //getStateByCountryId();
+        //getCityByStateId();
+        $("#Country").change(function () {
+            getStateByCountryId();
+        });
+        $("#State").change(function () {
+            getCityByStateId();
+        });
+
+
+        var getStateByCountryId = function () {
+            $.ajax({
+                url: '@Url.Action("Getstates","Employee")',
+                type: 'GET',
+                data: {
+                    countryId: $("#Country").val(),
+                },
+                success: function (data) {
+                    $("#State").empty();
+                    $('#State').append('<option value="' + '' + '">' + 'Select' + '</option>')
+                    $.each(data, function (index, element) {
+
+                        $('#State').append('<option value="' + element.id + '">' + element.statename + '</option>')
+                    });
+
+                }
+            });
+        }
+
+        var getCityByStateId = function () {
+            $.ajax({
+                url: '@Url.Action("Getcity","Employee")',
+                type: 'GET',
+                data: {
+                    stateId: $("#State").val(),
+                },
+                success: function (data) {
+                    $('#City').empty();
+                    $('#City').append('<option value="' + '' + '">' + 'Select' + '</option>')
+                    $.each(data, function (index, element) {
+
+                        $('#City').append('<option value="' + element.id + '">' + element.cityName + '</option>')
+                    });
+
+                }
+            });
+        }
+
+
+
+
+
+    });
+
+</script>
+}
+
